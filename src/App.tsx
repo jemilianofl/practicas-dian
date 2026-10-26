@@ -1,5 +1,7 @@
 import { useFormulario } from './hooks/useFormulario';
 import { Importador } from './components/Importador';
+import { Declarante } from './components/Declarante'; // Nuevo
+import { Exportador } from './components/Exportador'; // Nuevo
 import { Autoliquidacion } from './components/Autoliquidacion';
 import { ModalEnvio } from './components/ModalEnvio';
 
@@ -50,7 +52,9 @@ function App() {
 
           <Importador data={formData} onChange={handleInputChange} />
           
-          {/* Puedes agregar más componentes aquí como <Declarante /> o <Exportador /> */}
+          {/* NUEVAS SECCIONES */}
+          <Declarante data={formData} onChange={handleInputChange} />
+          <Exportador data={formData} onChange={handleInputChange} />
           
           <Autoliquidacion data={formData} onChange={handleInputChange} />
         </div>

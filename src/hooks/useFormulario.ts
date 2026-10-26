@@ -8,12 +8,22 @@ export const useFormulario = () => {
     nombreImportador: '',
     nitDeclarante: '',
     razonSocialDeclarante: '',
+    tipoUsuario: '',
+    codUsuario: '',
     nombreExportador: '',
+    ciudadExportador: '',
+    paisExportador: '',
+    emailExportador: '',
+    tasaCambio: '',
+    subpartida: '',
+    pesoBruto: '',
     valorFob: '',
     valorFletes: '',
     valorSeguros: '',
+    valorAduana: '',
     arancelTotal: '',
     ivaTotal: '',
+    sancionTotal: '',
     totalPagar: ''
   });
 
@@ -26,7 +36,7 @@ export const useFormulario = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSimularEnvio = (e: React.FormEvent<HTMLFormElement>) => { // <-- Tipo más específico
+  const handleSimularEnvio = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setEnviado(true);
     setTimeout(() => {
