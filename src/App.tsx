@@ -1,7 +1,7 @@
 import { useFormulario } from './hooks/useFormulario';
 import { ModalEnvio } from './components/ModalEnvio';
 
-// 1. SACAMOS EL COMPONENTE FUERA DE APP Y AGREGAMOS IDS PARA ACCESIBILIDAD
+// 1. SACAMOS EL COMPONENTE FUERA DE APP Y AGREGAMOS IDS PARA ACCESIBILIDAD Y SOMBREADO INTERACTIVO
 const InputForm = ({ name, className = "", value, onChange }: { name: string, className?: string, value: string, onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => (
   <input 
     id={name}
@@ -9,7 +9,7 @@ const InputForm = ({ name, className = "", value, onChange }: { name: string, cl
     name={name} 
     value={value} 
     onChange={onChange} 
-    className={`w-full bg-transparent outline-none text-xs font-mono text-blue-800 ${className}`} 
+    className={`w-full outline-none text-xs font-mono text-blue-800 transition-all duration-200 bg-blue-50/50 shadow-inner focus:bg-transparent focus:shadow-none ${className}`} 
   />
 );
 
@@ -170,7 +170,13 @@ function App() {
           {/* DESCRIPCIÓN */}
           <div className="border-l border-r border-b border-black p-1 h-24 flex flex-col bg-white">
             <label htmlFor="c91" className="text-[9px] font-bold">91. Descripción de las mercancías (No inicie la descripción con lo señalado en el arancel. Incluya marcas, seriales y otros)</label>
-            <textarea id="c91" name="c91" value={formData.c91 || ''} onChange={handleInputChange} className="w-full flex-1 outline-none resize-none text-[10px] bg-transparent font-mono text-blue-800"></textarea>
+            <textarea 
+              id="c91" 
+              name="c91" 
+              value={formData.c91 || ''} 
+              onChange={handleInputChange} 
+              className="w-full flex-1 outline-none resize-none text-[10px] font-mono text-blue-800 transition-all duration-200 bg-blue-50/50 shadow-inner focus:bg-transparent focus:shadow-none"
+            ></textarea>
           </div>
 
           {/* AUTOLIQUIDACIÓN (MATRIZ) */}
