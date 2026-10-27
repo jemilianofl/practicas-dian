@@ -3,28 +3,25 @@ import { useFormulario } from './hooks/useFormulario';
 import { ModalEnvio } from './components/ModalEnvio';
 import { CLASE_IMPORTADOR, TIPO_DECLARACION, LUGAR_INGRESO, REGISTRO_LICENCIA } from './data/catalogos';
 
-// 1. Ampliamos el tipado para aceptar input, textarea o cualquier elemento de formulario
-type FormElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
-
-const InputForm = ({ name, className = "", value, onChange }: { name: string, className?: string, value: string, onChange: (e: React.ChangeEvent<FormElement>) => void }) => (
+// Helper para Inputs de texto y Textareas
+const InputForm = ({ name, className = "", value, onChange }: { name: string, className?: string, value: string, onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void }) => (
   <input 
     id={name} 
     type="text" 
     name={name} 
     value={value} 
     onChange={onChange} 
-    // 2. Aumentamos la base tipográfica de text-[10px] a text-xs (12px)
     className={`w-full outline-none text-xs font-mono text-blue-800 transition-all duration-200 bg-blue-50/50 shadow-inner focus:bg-transparent focus:shadow-none ${className}`} 
   />
 );
 
-const SelectForm = ({ name, options, value, onChange }: { name: string, options: {id: string, label: string}[], value: string, onChange: (e: React.ChangeEvent<FormElement>) => void }) => (
+// Helper Exclusivo para Menús Desplegables (Select)
+const SelectForm = ({ name, options, value, onChange }: { name: string, options: {id: string, label: string}[], value: string, onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void }) => (
   <select 
     id={name} 
     name={name} 
     value={value} 
     onChange={onChange} 
-    // 2. Aumentamos la base tipográfica a text-xs
     className="w-full outline-none text-xs font-mono text-blue-800 bg-blue-50/50 shadow-inner focus:bg-transparent focus:shadow-none cursor-pointer"
   >
     <option value=""></option>
@@ -37,6 +34,9 @@ const SelectForm = ({ name, options, value, onChange }: { name: string, options:
 function App() {
   const { formData, handleInputChange, showModal, setShowModal, email, setEmail, enviado, handleSimularEnvio } = useFormulario();
   const [modoJuego, setModoJuego] = useState<'APRENDIZAJE' | 'EXAMEN'>('APRENDIZAJE');
+  
+  // Estado para alternar entre PDFs locales de prueba
+  const [pdfUrl, setPdfUrl] = useState('/factura.pdf');
 
   return (
     <div className="h-screen w-full bg-gray-200 flex flex-col overflow-hidden font-sans text-black">
@@ -62,10 +62,9 @@ function App() {
       {/* ÁREA DE TRABAJO DIVIDIDA */}
       <div className="flex-1 flex overflow-hidden">
         
-        {/* PANEL IZQUIERDO: Formulario - 3. Cambiamos de max-w a escala relativa para mejor visibilidad */}
+        {/* PANEL IZQUIERDO: Formulario */}
         <div className="w-7/12 h-full overflow-y-auto p-4 bg-gray-300 flex justify-center">
-          <div className="w-full max-w-[1400px]"> {/* Incremento en el ancho máximo */}
-            
+          <div className="w-full max-w-[1400px]">
             <div className="bg-white border-4 border-black p-1 shadow-2xl relative">
               
               {/* HEADER */}
@@ -209,7 +208,13 @@ function App() {
               {/* DESCRIPCIÓN */}
               <div className="border-l border-r border-b border-black p-1 h-32 flex flex-col bg-white">
                 <label htmlFor="c91" className="text-[10px] font-bold">91. Descripción de las mercancías (No inicie la descripción con lo señalado en el arancel. Incluya marcas, seriales y otros)</label>
-                <textarea id="c91" name="c91" value={formData.c91 || ''} onChange={handleInputChange} className="w-full flex-1 outline-none resize-none text-xs font-mono text-blue-800 transition-all duration-200 bg-blue-50/50 shadow-inner focus:bg-transparent focus:shadow-none"></textarea>
+                <textarea 
+                  id="c91" 
+                  name="c91" 
+                  value={formData.c91 || ''} 
+                  onChange={handleInputChange} 
+                  className="w-full flex-1 outline-none resize-none text-xs font-mono text-blue-800 transition-all duration-200 bg-blue-50/50 shadow-inner focus:bg-transparent focus:shadow-none"
+                ></textarea>
               </div>
 
               {/* AUTOLIQUIDACIÓN (MATRIZ) */}
@@ -378,17 +383,27 @@ function App() {
           <div className="bg-slate-900 text-white text-sm p-3 flex justify-between items-center shrink-0">
             <span className="font-bold">📄 Documentos Soporte</span>
             <div className="flex gap-2 text-xs">
-              <button className="px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded transition-colors">Factura Comercial</button>
-              <button className="px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded transition-colors">Doc. Transporte (B/L)</button>
+              <button 
+                onClick={() => setPdfUrl('/factura.pdf')}
+                className={`px-3 py-1 rounded transition-colors ${pdfUrl.includes('factura') ? 'bg-blue-600' : 'bg-slate-700 hover:bg-slate-600'}`}
+              >
+                Factura Comercial
+              </button>
+              <button 
+                onClick={() => setPdfUrl('/bl.pdf')}
+                className={`px-3 py-1 rounded transition-colors ${pdfUrl.includes('bl') ? 'bg-blue-600' : 'bg-slate-700 hover:bg-slate-600'}`}
+              >
+                Doc. Transporte (B/L)
+              </button>
             </div>
           </div>
           
-          <div className="flex-1 m-4 border-2 border-dashed border-slate-500 rounded flex flex-col items-center justify-center text-slate-400 bg-slate-800">
-            <span className="text-6xl mb-4">📑</span>
-            <p className="text-center px-8 text-lg">
-              Aquí se renderizará el PDF de los documentos soporte.<br/>
-              <em className="text-sm mt-2 block">(Se requiere librería como react-pdf o usar un iframe iframe src="ruta.pdf")</em>
-            </p>
+          <div className="flex-1 w-full h-full bg-slate-800">
+            <iframe 
+              src={pdfUrl} 
+              title="Visor PDF Documento Soporte" 
+              className="w-full h-full border-none"
+            />
           </div>
         </div>
 

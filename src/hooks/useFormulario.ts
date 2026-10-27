@@ -10,7 +10,8 @@ export const useFormulario = () => {
   const [email, setEmail] = useState('');
   const [enviado, setEnviado] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // Tipado estricto solucionado para Input, Select y Textarea
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
