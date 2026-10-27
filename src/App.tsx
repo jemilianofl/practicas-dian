@@ -382,18 +382,36 @@ function App() {
         <div className="w-5/12 h-full bg-slate-700 border-l-4 border-slate-900 flex flex-col relative shrink-0">
           <div className="bg-slate-900 text-white text-sm p-3 flex justify-between items-center shrink-0">
             <span className="font-bold">📄 Documentos Soporte</span>
-            <div className="flex gap-2 text-xs">
+            <div className="flex items-center gap-3 text-xs">
+              {/* Botón para cargar archivo local */}
+              <label className="cursor-pointer bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded transition-colors flex items-center gap-2 font-bold shadow-sm">
+                <span>📁 Subir mi PDF</span>
+                <input 
+                  type="file" 
+                  accept="application/pdf" 
+                  className="hidden" 
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setPdfUrl(URL.createObjectURL(file));
+                    }
+                  }} 
+                />
+              </label>
+              
+              <div className="h-4 w-px bg-slate-600 mx-1"></div> {/* Separador visual */}
+              
               <button 
                 onClick={() => setPdfUrl('/factura.pdf')}
-                className={`px-3 py-1 rounded transition-colors ${pdfUrl.includes('factura') ? 'bg-blue-600' : 'bg-slate-700 hover:bg-slate-600'}`}
+                className={`px-3 py-1.5 rounded transition-colors ${pdfUrl.includes('factura') ? 'bg-slate-500' : 'bg-slate-700 hover:bg-slate-600'}`}
               >
-                Factura Comercial
+                Factura Prueba
               </button>
               <button 
                 onClick={() => setPdfUrl('/bl.pdf')}
-                className={`px-3 py-1 rounded transition-colors ${pdfUrl.includes('bl') ? 'bg-blue-600' : 'bg-slate-700 hover:bg-slate-600'}`}
+                className={`px-3 py-1.5 rounded transition-colors ${pdfUrl.includes('bl') ? 'bg-slate-500' : 'bg-slate-700 hover:bg-slate-600'}`}
               >
-                Doc. Transporte (B/L)
+                B/L Prueba
               </button>
             </div>
           </div>
